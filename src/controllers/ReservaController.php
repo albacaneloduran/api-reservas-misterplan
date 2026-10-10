@@ -8,7 +8,13 @@ class ReservaController{
     }
 
     public function listarR (){
-        $datos= $this->modelo->ListarReserva();
+        $filtros = [
+            'estado'      => isset($_GET['estado']) ? $_GET['estado'] : null,
+            'fecha_desde' => isset($_GET['fecha_desde']) ? $_GET['fecha_desde'] : null,
+            'fecha_hasta' => isset($_GET['fecha_hasta']) ? $_GET['fecha_hasta'] : null,
+            'nombre'      => isset($_GET['nombre']) ? $_GET['nombre'] : null
+        ];
+        $datos= $this->modelo->ListarReserva($filtros);
         http_response_code(200);
         echo json_encode($datos);
     }

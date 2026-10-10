@@ -8,10 +8,33 @@ class Reserva
     {
         $this->conexion = Database::conectar();
     }
-    public function ListarReserva()
+    public function ListarReserva($filtros=[])
     {
-        $filt = $this->conexion->prepare("SELECT * from reserva");
-        $filt->execute();
+        $sql = "SELECT * from reserva WHERE 1=1";
+        $parametros = [];
+
+        if (!empty($filtros['estado'])) {
+            $sql .= " AND estado = :estado";
+            $parametros[':estado'] = $filtros['estado'];
+        }
+
+        if (!empty($filtros['fecha_desde'])) {
+            $sql .= " AND fecha_entrada >= :fecha_desde";
+            $parametros[':fecha_desde'] = $filtros['fecha_desde'];
+        }
+
+        if (!empty($filtros['fecha_hasta'])) {
+            $sql .= " AND fecha_entrada <= :fecha_hasta";
+            $parametros[':fecha_hasta'] = $filtros['fecha_hasta'];
+        }
+
+        if (!empty($filtros['nombre'])) {
+            $sql .= " AND nombre_huesped LIKE :nombre";
+            $parametros[':nombre'] = '%' . $filtros['nombre'] . '%';
+        }
+
+        $filt = $this->conexion->prepare($sql);
+        $filt->execute($parametros);
         return $filt->fetchAll();
     }
 
