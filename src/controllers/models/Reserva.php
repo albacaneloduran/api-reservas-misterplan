@@ -21,12 +21,12 @@ class Reserva
         return $filt->fetch();
     }
 
-    public function CrearReserva($datos){
+    public function CrearReserva($ArrayDatos){
         $filt = $this->conexion->prepare ("INSERT into reserva (nombre_huesped, email_huesped, nombre_alojamiento, fecha_entrada, fecha_salida, importe) 
         VALUES (:nombre, :email, :alojamiento, :entrada, :salida, :importe)");
 
-        return $filt->execute([':nombre' =>$datos["nombre_huesped"], ':email'=>$datos["email_huesped"], ':alojamiento'=>$datos["nombre_alojamiento"],
-        ':entrada'=>$datos["fecha_entrada"],':salida'=>$datos["fecha_salida"],':importe'=>$datos["importe"]]);       
+        return $filt->execute([':nombre' =>$ArrayDatos["nombre_huesped"], ':email'=>$ArrayDatos["email_huesped"], ':alojamiento'=>$ArrayDatos["nombre_alojamiento"],
+        ':entrada'=>$ArrayDatos["fecha_entrada"],':salida'=>$ArrayDatos["fecha_salida"],':importe'=>$ArrayDatos["importe"]]);       
     }
     public function CambiarReserva($id,$estado){
         $filt = $this->conexion->prepare("UPDATE reserva SET estado=:estado where id=:id");
