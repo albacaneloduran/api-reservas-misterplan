@@ -1,0 +1,22 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    {% if datos %}
+        <h2>Detalles de la Reserva #{{ datos.id }}</h2>
+        
+        <div>
+            <p><strong>Huésped:</strong> {{ datos.nombre_huesped }}</p>
+            <p><strong>Alojamiento:</strong> {{ datos.nombre_alojamiento }}</p>
+            <p><strong>Fecha Entrada:</strong> {{ datos.fecha_entrada }}</p>
+            <p><strong>Fecha Salida:</strong> {{ datos.fecha_salida }}</p>
+            <p><strong>Estado:</strong> {{ datos.estado|upper }}</p>
+        </div>
+
+        <br>
+        <a href="../">Volver al listado</a>
+    {% else %}
+        <h2>La reserva que buscas no existe.</h2>
+        <a href="../">Volver al listado</a>
+    {% endif %}
+
+{% endblock %}

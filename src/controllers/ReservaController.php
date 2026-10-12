@@ -75,5 +75,24 @@ class ReservaController{
             echo json_encode(["error"=>"error interno al acttualizar la reserva"]);
         }
     }
+
+    //Para las vistas
+    private $twig;
+    public function setTwig($twig) {
+        $this->twig = $twig;
+    }
+
+    public function mostrarTabla() {  
+        $datos = $this->modelo->ListarReserva();
+        echo $this->twig->render('tabla.twig', ['datos' => $datos]);
+    }
+
+    public function mostrarDetallesR($id){
+        $datos = $this->modelo->DetalleReserva($id);
+        if(!$datos){
+            http_response_code(404);
+        }
+        echo $this->twig->render('detalleR.twig',['datos'=>$datos]);
+    }
 }
 ?>

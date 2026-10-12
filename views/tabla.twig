@@ -1,0 +1,60 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div>
+        <form id="formulario-filtros">
+            <label for="nombre">Huésped:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ej. Alba">
+
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado">
+                <option value="">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="confirmada">Confirmada</option>
+                <option value="cancelada">Cancelada</option>
+            </select>
+
+            <label for="fecha_desde">Desde:</label>
+            <input type="date" id="fecha_desde" name="fecha_desde">
+
+            <label for="fecha_hasta">Hasta:</label>
+            <input type="date" id="fecha_hasta" name="fecha_hasta">
+
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Huésped</th>
+                <th>Alojamiento</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in datos %}
+                <tr>
+                    <td>{{ i.id }}</td>
+                    <td>{{ i.nombre_huesped }}</td>
+                    <td>{{ i.nombre_alojamiento }}</td>
+                    <td>{{ i.fecha_entrada }}</td>
+                    <td>{{ i.fecha_salida }}</td>
+                    <td>{{ i.estado }}</td>
+                </tr>
+
+                <td>
+                    <a href="index.php/detalle/{{ i.id }}">Ver detalles</a>
+                </td>
+            {% else %}
+                <tr>
+                    <td>No hay reservas registradas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
