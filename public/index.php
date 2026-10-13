@@ -4,6 +4,7 @@ require_once __DIR__ . '/../src/Controllers/ReservaController.php';
 
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../views');
 $twig = new \Twig\Environment($loader);
+$twig->addGlobal('RUTA_BASE', '/misterplan_reservas/public/index.php');
 
 $controlador = new ReservaController();
 $controlador->setTwig($twig);

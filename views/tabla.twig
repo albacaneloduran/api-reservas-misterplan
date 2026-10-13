@@ -4,7 +4,7 @@
     <div>
         <form id="formulario-filtros">
             <label for="nombre">Huésped:</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Ej. Alba">
+            <input type="text" id="nombre" name="nombre" placeholder="Introduce un nombre...">
 
             <label for="estado">Estado:</label>
             <select id="estado" name="estado">
@@ -24,37 +24,33 @@
         </form>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Huésped</th>
-                <th>Alojamiento</th>
-                <th>Entrada</th>
-                <th>Salida</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in datos %}
-                <tr>
-                    <td>{{ i.id }}</td>
-                    <td>{{ i.nombre_huesped }}</td>
-                    <td>{{ i.nombre_alojamiento }}</td>
-                    <td>{{ i.fecha_entrada }}</td>
-                    <td>{{ i.fecha_salida }}</td>
-                    <td>{{ i.estado }}</td>
-                </tr>
+    <table id="tabla">
+        <tr>
+            <th>ID</th>
+            <th>Huésped</th>
+            <th>Alojamiento</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
 
+        {% for i in datos %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.nombre_huesped }}</td>
+                <td>{{ i.nombre_alojamiento }}</td>
+                <td>{{ i.fecha_entrada }}</td>
+                <td>{{ i.fecha_salida }}</td>
+                <td>{{ i.estado }}</td>
                 <td>
-                    <a href="index.php/detalle/{{ i.id }}">Ver detalles</a>
+                    <a href="{{ RUTA_BASE }}/detalle/{{ i.id }}">Ver detalles</a>
                 </td>
-            {% else %}
-                <tr>
-                    <td>No hay reservas registradas.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
+            </tr>
+        {% else %}
+            <tr>
+                <td>No hay reservas registradas.</td>
+            </tr>
+        {% endfor %}
     </table>
 {% endblock %}
