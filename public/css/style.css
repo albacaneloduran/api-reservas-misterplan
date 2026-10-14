@@ -198,3 +198,13 @@ a:hover {
         display: block;
     }
 }
+
+/*FIX BOTONES TABLA MÓVIL */
+td a {
+    display: inline-block;
+    margin-bottom: 8px; 
+}
+
+.btn-confirmar, .btn-cancelar {
+    margin-top: 6px;
+}
