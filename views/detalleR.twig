@@ -5,11 +5,34 @@
         <h2>Detalles de la Reserva #{{ datos.id }}</h2>
         
         <div>
-            <p><strong>Huésped:</strong> {{ datos.nombre_huesped }}</p>
-            <p><strong>Alojamiento:</strong> {{ datos.nombre_alojamiento }}</p>
-            <p><strong>Fecha Entrada:</strong> {{ datos.fecha_entrada }}</p>
-            <p><strong>Fecha Salida:</strong> {{ datos.fecha_salida }}</p>
-            <p><strong>Estado:</strong> {{ datos.estado|upper }}</p>
+            <p>Huésped: {{ datos.nombre_huesped }}</p>
+            <p>Alojamiento: {{ datos.nombre_alojamiento }}</p>
+            <p>Fecha Entrada: {{ datos.fecha_entrada |date("d/m/Y") }}</p>
+            <p>Fecha Salida: {{ datos.fecha_salida |date("d/m/Y")}}</p>
+            <p>Estado: {{ datos.estado|upper }}</p>
+            <p>Importe: {{ datos.importe|number_format(2, ',', '.') }} €</p>
+            <p>Notas: {% if datos.notas %} 
+                    {{ datos.notas }} 
+                {% else %} 
+                    Ninguna 
+                {% endif %}
+            </p>
+            <p>Fecha de Creación: {{ datos.fecha_creacion }}</p>
+        </div>
+
+        <div>
+            <h3>Historial de Eventos</h3>
+            <ul>
+                {% if historial %}
+                    {% for evento in historial %}
+                        <li>
+                            {{ evento.fecha_creacion }} - {{ evento.tipo }}: {{ evento.descripcion }}
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No hay eventos registrados para esta reserva.</li>
+                {% endif %}
+            </ul>
         </div>
 
         <br>

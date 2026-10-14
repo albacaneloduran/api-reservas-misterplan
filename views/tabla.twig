@@ -24,33 +24,76 @@
         </form>
     </div>
 
-    <table id="tabla">
-        <tr>
-            <th>ID</th>
-            <th>Huésped</th>
-            <th>Alojamiento</th>
-            <th>Entrada</th>
-            <th>Salida</th>
-            <th>Estado</th>
-            <th></th>
-        </tr>
+    <div class="tabla-responsive">
+        <table id="tabla">
+            <tr>
+                <th>ID</th>
+                <th>Huésped</th>
+                <th>Alojamiento</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Estado</th>
+                <th>Importe</th>
+                <th></th>
+            </tr>
 
-        {% for i in datos %}
-            <tr>
-                <td>{{ i.id }}</td>
-                <td>{{ i.nombre_huesped }}</td>
-                <td>{{ i.nombre_alojamiento }}</td>
-                <td>{{ i.fecha_entrada }}</td>
-                <td>{{ i.fecha_salida }}</td>
-                <td>{{ i.estado }}</td>
-                <td>
-                    <a href="{{ RUTA_BASE }}/detalle/{{ i.id }}">Ver detalles</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td>No hay reservas registradas.</td>
-            </tr>
-        {% endfor %}
-    </table>
+            {% for i in datos %}
+                <tr>
+                    <td>{{ i.id }}</td>
+                    <td>{{ i.nombre_huesped }}</td>
+                    <td>{{ i.nombre_alojamiento }}</td>
+                    <td>{{ i.fecha_entrada|date("d/m/Y") }}</td>
+                    <td>{{ i.fecha_salida|date("d/m/Y") }}</td>
+                    <td>{{ i.estado }}</td>
+                    <td>{{ i.importe|number_format(2, ',', '.') }} €</td>
+                    <td>
+                        <a href="{{ RUTA_BASE }}/detalle/{{ i.id }}">Ver detalles</a>
+                        {% if i.estado != 'cancelada' %}
+                            {% if i.estado != 'confirmada' %}
+                                <button class="btn-confirmar" data-id="{{ i.id }}">Confirmar</button>
+                            {% endif %}
+                            <button class="btn-cancelar" data-id="{{ i.id }}">Cancelar</button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>No hay reservas registradas.</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <h3>Crear Nueva Reserva</h3>
+    <form id="formulario-crear">
+        <label>Huésped:</label>
+        <input type="text" id="crear_nombre" required>
+        
+        <label>Email:</label>
+        <input type="email" id="crear_email" required>
+        
+        <label>Alojamiento:</label>
+        <select id="crear_alojamiento" required>
+            <option value="">Selecciona un alojamiento...</option>
+            <option value="Apartamento Rural Cáceres">Apartamento Rural Cáceres</option>
+            <option value="Cabaña Valle del Jerte">Cabaña Valle del Jerte</option>
+            <option value="Hotel Plaza Mayor">Hotel Plaza Mayor</option>
+            <option value="Casa Rural Monfragüe">Casa Rural Monfragüe</option>
+        </select>
+        
+        <label>Entrada:</label>
+        <input type="date" id="crear_entrada" required>
+        
+        <label>Salida:</label>
+        <input type="date" id="crear_salida" required>
+
+        <label>Importe (€):</label>
+        <input type="number" step="0.01" min="0" id="crear_importe" required>
+        
+        <label>Notas:</label>
+        <textarea id="crear_notas" placeholder="Peticiones especiales..."></textarea>
+
+        <button type="submit">Guardar Reserva</button>
+        <p id="mensaje-crear" style="font-weight: bold;"></p>
+    </form>
 {% endblock %}

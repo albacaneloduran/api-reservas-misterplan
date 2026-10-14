@@ -44,12 +44,41 @@ class Reserva
         return $filt->fetch();
     }
 
-    public function CrearReserva($ArrayDatos){
-        $filt = $this->conexion->prepare ("INSERT into reserva (nombre_huesped, email_huesped, nombre_alojamiento, fecha_entrada, fecha_salida, importe) 
-        VALUES (:nombre, :email, :alojamiento, :entrada, :salida, :importe)");
+    public function HistorialReserva($id){
+        $filt = $this->conexion->prepare("SELECT * FROM reserva_evento WHERE reserva_id = :id ORDER BY fecha_creacion DESC");
+        $filt->execute([':id' => $id]);
+        return $filt->fetchAll();
+    }
 
-        return $filt->execute([':nombre' =>$ArrayDatos["nombre_huesped"], ':email'=>$ArrayDatos["email_huesped"], ':alojamiento'=>$ArrayDatos["nombre_alojamiento"],
-        ':entrada'=>$ArrayDatos["fecha_entrada"],':salida'=>$ArrayDatos["fecha_salida"],':importe'=>$ArrayDatos["importe"]]);       
+    public function CrearReserva($ArrayDatos){
+        $filt = $this->conexion->prepare ("INSERT into reserva (nombre_huesped, email_huesped, nombre_alojamiento, fecha_entrada, fecha_salida, importe, notas) 
+        VALUES (:nombre, :email, :alojamiento, :entrada, :salida, :importe, :notas)");
+
+        $guardado = $filt->execute([
+            ':nombre' => $ArrayDatos["nombre_huesped"], 
+            ':email' => $ArrayDatos["email_huesped"], 
+            ':alojamiento' => $ArrayDatos["nombre_alojamiento"],
+            ':entrada' => $ArrayDatos["fecha_entrada"],
+            ':salida' => $ArrayDatos["fecha_salida"],
+            ':importe' => $ArrayDatos["importe"],
+            ':notas' => $ArrayDatos["notas"]
+        ]);
+
+        if ($guardado) {
+            $consultaId = $this->conexion->prepare("SELECT id FROM reserva ORDER BY id DESC LIMIT 1");
+            $consultaId->execute();
+            $ultimaReserva = $consultaId->fetch();
+            $idNuevo = $ultimaReserva['id'];
+
+            $filtEvento = $this->conexion->prepare("INSERT into reserva_evento (reserva_id, tipo, descripcion) VALUES (:id, :tipo, :descripcion)");
+            $filtEvento->execute([
+                ':id' => $idNuevo,
+                ':tipo' => 'CREACION',
+                ':descripcion' => 'Reserva creada en la web en estado pendiente'
+            ]);
+        }
+
+       return $guardado;      
     }
     public function CambiarReserva($id,$estado){
         $filt = $this->conexion->prepare("UPDATE reserva SET estado=:estado where id=:id");
